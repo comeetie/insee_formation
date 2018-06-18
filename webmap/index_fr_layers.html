@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8' />
+    <title>@comeetie, exemple mapbox-gl </title>
+    <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+    <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.44.0/mapbox-gl.js'></script>
+    <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.44.0/mapbox-gl.css' rel='stylesheet' />
+    <style>
+
+
+
+
+        body { margin:0; padding:0; font-family: "Lato", sans-serif;}
+        #map { position:absolute; top:0; bottom:0; width:80%;margin-left:20% }
+.sidenav {
+    height: 100%;
+    width: 20%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: #eee;
+    overflow-x: hidden;
+    padding-top: 60px;
+    padding-left: 10px;
+}
+
+.sidenav a {
+    text-decoration: none;
+    color: #313131;
+    display: block;
+    transition: 0.3s;
+}
+
+.sidenav a:hover {
+    color: #212121;
+}
+
+
+
+@media screen and (max-height: 450px) {
+  .sidenav {padding-top: 15px;}
+  .sidenav a {font-size: 18px;}
+}
+
+    </style>
+</head>
+<body>
+<script src='./assets/js/colorbrewer.js'></script>
+
+<div class="sidenav">
+<img >
+<h1> </h1>
+
+<h4> Variables </h4>
+
+<select id="monselect" onchange='changeLayer(this)'>
+  <option value="rev" selected>Revenus</option>
+  <option value="pop">Population</option>
+  <option value="basr">% bas salaire</option>
+</select>
+
+
+
+
+</div>
+
+<div id='map'></div>
+
+
+    <script>
+mapboxgl.accessToken = 'undefined';
+        var map = new mapboxgl.Map({
+            container: 'map',
+            style: 'omap_fr.json',
+            center: [2.3,47.5],
+	    minZoom: 5,
+	    maxZoom:16,
+            zoom: 10,
+	    hash:true
+        });
+//map.showTileBoundaries = true
+
+var nav = new mapboxgl.NavigationControl();
+map.addControl(nav, 'top-left');
+
+
+
+map.on('load', function () {
+
+
+  var mylayers = [
+      {
+        coloramp :  ['step', ['/',['get','men_basr'],['get', 'men']],"#555555"],
+        quantiles : [ 0,   0.0454545454545455, 0.0769230769230769,   0.111111111111111,  0.148148148148148,   0.181818181818182,  0.222222222222222,  0.272727272727273,  0.344827586206],
+        cols : colorbrewer["RdPu"][9],
+        name:"basr"
+      },
+      {
+        coloramp : ['step', ['/',['get','rev'],['get', 'pop']],"#555555"],
+        quantiles : [ 0,   15233, 16514, 17489, 18364,19224,20139,21238,22780],
+        cols : colorbrewer["RdBu"][9],
+        name:"rev"
+      },
+      {
+        coloramp : ['step', ['*',['/',['get','pop'],['get', 'area']],100000],"#555555"],
+        quantiles : [ 0, 5,10,  50,100,500,1000,5000,10000],
+        cols : colorbrewer["YlOrRd"][9],
+        name:"pop"
+      }
+  ]
+
+  map.addSource('inseedata',{
+      type: 'vector',
+      url: 'http://www.comeetie.fr/tileserver-php/inseedata_metropole.json'
+  })
+
+
+  mylayers.forEach(function(l){
+      console.log(l)
+      l.quantiles.forEach(function(q,i){l.coloramp.push(q);l.coloramp.push(l.cols[i])})
+      console.log(l)
+
+      map.addLayer({
+          "id": l.name,
+          "type": "fill",
+          "source": "inseedata",
+          "source-layer": "inseedata",
+          "paint": {
+              "fill-color": l.coloramp,
+              'fill-opacity': 0.95
+          },
+          "layout": {
+            "visibility": "none"
+          }
+      },'waterway');
+  })
+
+
+
+/*map.on('click', function (e) {
+    var features = map.queryRenderedFeatures(e.point);
+    console.log(JSON.stringify(features, null, 2));
+});*/
+
+});
+
+
+function changeLayer(l){
+  map.setLayoutProperty('pop', 'visibility', 'none');
+  map.setLayoutProperty('rev', 'visibility', 'none');
+  map.setLayoutProperty('basr', 'visibility', 'none');
+  map.setLayoutProperty(l.value, 'visibility', 'visible');
+  console.log(l.value)
+}
+
+
+    </script>
+</body>
+</html>
