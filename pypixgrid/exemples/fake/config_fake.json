@@ -3,7 +3,7 @@
         "user": "postgres",
         "dbname": "fake",
         "host": "localhost",
-        "password": "post"
+        "password": "XXX"
     },
     "data_format": {
         "geom_table": "carreaux",
