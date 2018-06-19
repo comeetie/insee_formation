@@ -3,7 +3,7 @@
         "user": "come",
         "dbname": "metropole",
         "host": "localhost",
-        "password": "haPPiOOon"
+        "password": "XXX"
     },
     "data_format": {
         "geom_table": "car_data",

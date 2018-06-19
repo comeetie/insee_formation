@@ -4,7 +4,7 @@ USER=come
 DB=reunion
 HOST=127.0.0.1
 # a modifier et decommenter en cas d'identification par mots de passe
-export PGPASSWORD=XXX
+export PGPASSWORD=haPPiOOon
 psql -c "create database $DB" -U $USER -h $HOST
 psql -d $DB -v DIR="$PWD" -f init_reunion.sql -U $USER -h $HOST
 ogr2ogr -f PostgreSQL PG:"dbname=$DB user=$USER host=$HOST" ./data/200m-carreaux-reunion/car_r04.mif

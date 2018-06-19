@@ -1,9 +1,9 @@
 {
     "pg_connection": {
         "user": "come",
-        "dbname": "reunion",
+        "dbname": "metropole",
         "host": "localhost",
-        "password": "XXX"
+        "password": "haPPiOOon"
     },
     "data_format": {
         "geom_table": "car_data",
@@ -14,8 +14,8 @@
             "name": "pop",
             "aggregation": "SUM"
         },{
-	    "name":"mrev", 
-	    "aggregation": "AVG"
+	    "name":"rev", 
+	    "aggregation": "SUM"
 	},{
 	    "name": "m25ans",  
 	    "aggregation": "SUM"
@@ -42,7 +42,9 @@
         [9, 2],
         [8, 2],
         [7, 2],
-	[6, 2]
+	[6, 2],
+	[5,2],
+	[4,2]
     ],
     "output": {
         "layername": "inseedata",
